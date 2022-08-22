@@ -23,3 +23,10 @@ WHERE deposit_count >= 2
 GROUP BY month
 ORDER BY month;
 ````
+#### Answer:
+|month|customer_count|
+|-----|--------------|
+|1    |115           |
+|2    |108           |
+|3    |113           |
+|4    |50            |
