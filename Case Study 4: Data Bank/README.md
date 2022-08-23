@@ -50,7 +50,7 @@ This table stores all customer deposits, withdrawals and purchases made using th
 
 ### A. Customer Nodes Exploration
 
-View my solution [here]
+View my solution [here](https://github.com/Kieuhoanh/8-weeks-challenge-with-SQL/blob/fbd69b29fff33ff09224c2da4ba2d36e2372691e/Case%20Study%204:%20Data%20Bank/A.%20Customer%20Nodes%20Exploration.md)
 
 1. How many unique nodes are there on the Data Bank system?
 2. What is the number of nodes per region?
