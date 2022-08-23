@@ -60,7 +60,7 @@ View my solution [here](https://github.com/Kieuhoanh/8-weeks-challenge-with-SQL/
 
 ### B. Customer Transactions
 
-View my solution [here]
+View my solution [here](https://github.com/Kieuhoanh/8-weeks-challenge-with-SQL/blob/fbd69b29fff33ff09224c2da4ba2d36e2372691e/Case%20Study%204:%20Data%20Bank/B.%20Customer%20Transactions.md)
   
 1. What is the unique count and total amount for each transaction type?
 2. What is the average total historical deposit counts and amounts for all customers?
