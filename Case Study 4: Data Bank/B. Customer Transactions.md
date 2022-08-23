@@ -70,3 +70,5 @@ ORDER BY month;
 |2    |108           |
 |3    |113           |
 |4    |50            |
+
+### 4. What is the closing balance for each customer at the end of the month?
