@@ -72,3 +72,46 @@ ORDER BY month;
 |4    |50            |
 
 ### 4. What is the closing balance for each customer at the end of the month?
+```sql
+ -- CTE 1 - To identify transaction amount as an inflow (+) or outflow (-)
+WITH monthly_balances AS (
+SELECT 
+customer_id 
+,(DATE_TRUNC('month', txn_date) + INTERVAL '1 MONTH - 1 DAY') AS closing_month 
+,SUM(CASE WHEN txn_type = 'withdrawal' OR txn_type = 'purchase' THEN (-txn_amount)
+ELSE txn_amount END) AS transaction_balance
+FROM data_bank.customer_transactions
+GROUP BY customer_id, closing_month
+),
+
+--CTE 2 - To generate txn_date as a series of last day of month for each customer
+last_day AS (
+SELECT
+DISTINCT customer_id
+,('2020-01-31'::DATE + GENERATE_SERIES(0,3) * INTERVAL '1 MONTH') AS ending_month
+FROM data_bank.customer_transactions
+)
+
+-- Create closing balance for each month using Window function SUM() to add changes during the month
+SELECT 
+ld.customer_id 
+,ld.ending_month
+,COALESCE(mb.transaction_balance, 0) AS monthly_change
+,SUM(mb.transaction_balance) OVER 
+(PARTITION BY ld.customer_id ORDER BY ld.ending_month) AS closing_balance
+FROM last_day ld
+LEFT JOIN monthly_balances mb
+ON ld.ending_month = mb.closing_month
+AND ld.customer_id = mb.customer_id
+```
+#### Answer:
+|customer_id  |ending_month|monthly_change|closing_balance|
+|-------------|------------|--------------|---------------|
+|1            |2020-01-31  |312           |312            |
+|1            |2020-02-29  |0             |312            |
+|1            |2020-03-31  |-952          |-640           |
+|1            |2020-04-30  |0             |-640           |
+|2            |2020-01-31  |549           |549            |
+|2            |2020-02-29  |0             |549            |
+|2            |2020-03-31  |61            |610            |
+|2            |2020-04-30  |0             |610            |
