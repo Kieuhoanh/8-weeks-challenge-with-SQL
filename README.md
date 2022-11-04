@@ -20,7 +20,7 @@ Thanks @DataWithDanny for the excellent SQL case studies! 👋🏻
 
 <img src="https://user-images.githubusercontent.com/108972584/178151377-fe93a44d-e136-4b8c-828d-a0220c979a08.png" alt="Image" width="500" height="520">
 
-View the case study [here](https://8weeksqlchallenge.com/case-study-1/) and my **solution** [here](https://github.com/katiehuangx/8-Week-SQL-Challenge/tree/main/Case%20Study%20%231%20-%20Danny's%20Diner) and on [Medium](https://katiehuangx.medium.com/8-week-sql-challenge-case-study-week-1-dannys-diner-2ba026c897ab?source=friends_link&sk=ed355696f5a70ff8b3d5a1b905e5dabe).
+View the case study [here](https://8weeksqlchallenge.com/case-study-1/) and my **solution** [here](https://github.com/Kieuhoanh/8-weeks-challenge-with-SQL/blob/main/Case%20Study%201:%20Danny's%20Dinner/Solution.md) and on [Medium](https://katiehuangx.medium.com/8-week-sql-challenge-case-study-week-1-dannys-diner-2ba026c897ab?source=friends_link&sk=ed355696f5a70ff8b3d5a1b905e5dabe).
 
 ### Business Task
 Danny wants to use the data to answer a few simple questions about his customers, especially about their visiting patterns, how much money they’ve spent and also which menu items are their favourite. 
