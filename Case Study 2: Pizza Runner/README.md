@@ -1,5 +1,5 @@
 # 🍕 CASE STUDY 2: PIZZA RUNNER
-![image](https://8weeksqlchallenge.com/case-study-2)
+![image](https://8weeksqlchallenge.com/images/case-study-designs/2.png)
 
 ## 📚 Table of Contents
 - [Business Task](#business-task)
