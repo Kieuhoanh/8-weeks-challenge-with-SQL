@@ -1,4 +1,6 @@
 # 🍕CASE STUDY 2: PIZZA RUNNER 
 
-## Solution
+## 💥 Solution
+
+### 1. 
 
