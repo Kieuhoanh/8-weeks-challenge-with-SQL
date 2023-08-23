@@ -1,4 +1,4 @@
-![image](https://github.com/Kieuhoanh/8-weeks-challenge-with-SQL/assets/108972584/e11e0a2e-7806-4814-9d02-32634c78191e)# 🍕CASE STUDY 2: PIZZA RUNNER
+# 🍕CASE STUDY 2: PIZZA RUNNER
 
 ## 🧰 CLEAN DATA
 ### 🛠 Table: Customer_orders
@@ -67,5 +67,5 @@ order_id
 	END cancellation
 FROM pizza_runner.runner_orders
 ```
-This is customers_orders_temp table and we will use this table to run all our queries.
+This is runner_orders_temp table and we will use this table to run all our queries.
 ![image](https://user-images.githubusercontent.com/81607668/129472778-6403381d-6e30-4884-a011-737b1eff7379.png)
