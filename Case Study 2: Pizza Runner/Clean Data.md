@@ -48,7 +48,8 @@ Looking at the runner_orders table below, we can see that there are:
 - In the duration column, there are missing/ blank spaces ' ' and null values.
 - In the cancellation column, there are missing/ blank spaces ' ' and null values.
 ![image](https://user-images.githubusercontent.com/81607668/129472585-badae450-52d2-442e-9d50-e4d0d8fce83a.png)
-Our course of action to clean the table:
+#### Our course of action to clean the table:
+##### Method 1
 - In pickup_time column, remove nulls and replace with blank space ' '.
 - In distance column, remove "km" and nulls and replace with blank space ' '.
 - In duration column, remove "minutes", "minute" and nulls and replace with blank space ' '.
@@ -82,3 +83,31 @@ FROM pizza_runner.runner_orders
 ```
 This is runner_orders_temp table and we will use this table to run all our queries.
 ![image](https://user-images.githubusercontent.com/81607668/129472778-6403381d-6e30-4884-a011-737b1eff7379.png)
+#### Method 2
+- Update data directly in runner_orders table
+```sql
+UPDATE pizza_runner.runner_orders
+SET pickup_time = NULL
+WHERE pickup_time ='' OR pickup_time LIKE 'null';
+
+UPDATE pizza_runner.runner_orders
+SET distance = NULL
+WHERE distance ='' OR distance LIKE 'null';
+
+UPDATE pizza_runner.runner_orders
+SET distance = TRIM('km' FROM distance)
+WHERE distance LIKE '%km';
+
+UPDATE pizza_runner.runner_orders
+SET duration = NULL
+WHERE duration ='' OR duration LIKE 'null';
+
+UPDATE pizza_runner.runner_orders
+SET duration = LEFT(distance,2)
+WHERE duration LIKE '%mins' OR duration LIKE '%minute' OR duration LIKE '%minutes';
+
+UPDATE pizza_runner.runner_orders
+SET cancellation = NULL
+WHERE cancellation ='' OR cancellation LIKE 'null';
+```
+![image](https://user-images.githubusercontent.com/108972584/263039255-104363c2-1517-493d-aaf3-ebbd745a2b17.png)
