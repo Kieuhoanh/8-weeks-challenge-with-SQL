@@ -18,3 +18,4 @@ FROM pizza_runner.customer_orders
 ```
 #### Answer:
 ![image](https://user-images.githubusercontent.com/108972584/262911147-510fedb8-7b2b-4121-9a71-bd351664160c.png)
+### 3. How many successful orders were delivered by each runner?
