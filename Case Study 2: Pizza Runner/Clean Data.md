@@ -6,7 +6,8 @@ Looking at the customer_orders table below, we can see that there are:
 - In the exclusions column, there are missing/ blank spaces ' ' and null values.
 - In the extras column, there are missing/ blank spaces ' ' and null values.
 ![image](https://user-images.githubusercontent.com/81607668/129472388-86e60221-7107-4751-983f-4ab9d9ce75f0.png)
-Our course of action to clean the table:
+#### Our course of action to clean the table:
+##### Method 1
 - Create a temporary table with all the columns
 - Remove null values in exlusions and extras columns and replace with blank space ' '.
 ``` sql
@@ -16,11 +17,11 @@ order_id
 ,customer_id
 ,pizza_id
 , CASE 
-	WHEN exclusions IS null OR exclusions LIKE 'null' THEN ''
+	WHEN exclusions ='' OR exclusions LIKE 'null' THEN NULL
 	ELSE exclusions
 	END exclusions
 , CASE 
-	WHEN extras IS NULL OR extras LIKE 'null' THEN ''
+	WHEN extras ='' OR extras LIKE 'null' THEN NULL
 	ELSE extras
 	END extras
 ,order_time
@@ -28,6 +29,18 @@ FROM pizza_runner.customer_orders
 ```
 This is customers_orders_temp table and we will use this table to run all our queries.
 ![image](https://user-images.githubusercontent.com/81607668/129472551-fe3d90a0-1e8b-4f32-a2a7-2ecd3ac469ef.png)
+##### Method 2
+- Update data directly of exclusions column and extras column in customer_orders table
+```sql
+UPDATE pizza_runner.customer_orders
+SET exclusions = NULL
+WHERE exclusions ='' OR exclusions LIKE 'null';
+UPDATE pizza_runner.customer_orders
+SET extras = NULL
+WHERE extras ='' OR extras LIKE 'null';
+```
+![image](https://user-images.githubusercontent.com/108972584/263035028-24f23d39-6fdf-47a5-963a-bb94541fe4c2.png)
+
 ### 🛠 Table: runner_orders
 Looking at the runner_orders table below, we can see that there are:
 - In the pickup_time column, there are missing/ blank spaces ' ' and null values.
