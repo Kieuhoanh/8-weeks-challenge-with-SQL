@@ -56,4 +56,33 @@ ORDER BY 1
 ```
 #### Answer
 ![image](https://user-images.githubusercontent.com/108972584/263247634-126ea57b-0538-48df-bd42-5f1dc6cdc953.png)
-
+### 6. What was the maximum number of pizzas delivered in a single order?
+```sql
+SELECT
+MAX(pizza_count) max_pizza
+FROM( 
+SELECT
+c.order_id
+,COUNT(*) pizza_count
+FROM pizza_runner.customer_orders c
+LEFT JOIN pizza_runner.runner_orders r
+	ON c.order_id = r.order_id
+WHERE cancellation IS NULL
+GROUP BY 1 ) count_pizza
+```
+#### Answer
+![image](https://user-images.githubusercontent.com/108972584/263250304-06cf9734-9e05-4eed-9e19-370572ec4d8a.png)
+### 7. For each customer, how many delivered pizzas had at least 1 change and how many had no changes?
+```sql
+SELECT
+customer_id
+,SUM(CASE WHEN exclusions IS NOT NULL OR extras IS NOT NULL THEN 1 ELSE 0 END) at_least_1_change
+,SUM(CASE WHEN exclusions IS NULL AND extras IS NULL THEN 1 ELSE 0 END) no_change
+FROM pizza_runner.customer_orders c
+LEFT JOIN pizza_runner.runner_orders r
+	ON 	r.order_id = c.order_id
+WHERE cancellation IS NULL
+GROUP BY 1
+```
+#### Answer
+![image](https://user-images.githubusercontent.com/108972584/263253587-0b6cb41c-eb90-49b6-b550-8c56089e7d44.png)
