@@ -29,7 +29,7 @@ GROUP BY 1
 ```
 #### Answer
 ![image](https://user-images.githubusercontent.com/108972584/263240530-df453bd2-966e-406b-b65f-9128ee512f05.png)
-### 4.How many of each type of pizza was delivered?
+### 4. How many of each type of pizza was delivered?
 ```sql
 SELECT
 p.pizza_name
@@ -44,3 +44,16 @@ GROUP BY 1
 ```
 #### Answer
 ![image](https://user-images.githubusercontent.com/108972584/263243851-034b0f13-0b48-4a92-8534-7fae91f896b8.png)
+### 5. How many Vegetarian and Meatlovers were ordered by each customer?
+```sql
+SELECT
+customer_id
+,SUM(CASE WHEN pizza_id=1 THEN 1 ELSE 0 END ) Meatlovers
+,SUM(CASE WHEN pizza_id=2 THEN 1 ELSE 0 END ) Vegetarian
+FROM pizza_runner.customer_orders
+GROUP BY 1
+ORDER BY 1
+```
+#### Answer
+![image](https://user-images.githubusercontent.com/108972584/263247634-126ea57b-0538-48df-bd42-5f1dc6cdc953.png)
+
