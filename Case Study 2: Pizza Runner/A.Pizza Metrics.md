@@ -29,3 +29,18 @@ GROUP BY 1
 ```
 #### Answer
 ![image](https://user-images.githubusercontent.com/108972584/263240530-df453bd2-966e-406b-b65f-9128ee512f05.png)
+### 4.How many of each type of pizza was delivered?
+```sql
+SELECT
+p.pizza_name
+,COUNT(c.pizza_id) pizza_count
+FROM pizza_runner.customer_orders c
+LEFT JOIN pizza_runner.runner_orders r
+	ON c.order_id = r.order_id
+LEFT JOIN pizza_runner.pizza_names p
+	ON c.pizza_id = p.pizza_id
+WHERE r.cancellation IS NULL
+GROUP BY 1
+```
+#### Answer
+![image](https://user-images.githubusercontent.com/108972584/263243851-034b0f13-0b48-4a92-8534-7fae91f896b8.png)
