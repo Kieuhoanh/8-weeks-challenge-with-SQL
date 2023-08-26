@@ -98,3 +98,24 @@ WHERE cancellation IS NULL AND exclusions IS NOT NULL AND extras IS NOT NULL
 #### Answer
 ![image](https://user-images.githubusercontent.com/108972584/263449166-74324ed6-e9b0-4ce7-8c3e-3c7757013e93.png)
 ### 9. What was the total volume of pizzas ordered for each hour of the day?
+```SQL
+SELECT
+DATE_PART('HOUR',order_time) hour_of_day
+,COUNT(order_id) pizza_order
+FROM pizza_runner.customer_orders
+GROUP BY 1
+ORDER BY 1
+```
+#### Answer
+![image](https://user-images.githubusercontent.com/108972584/263452275-72f4a45f-dd6b-41b7-a1d4-4aab929f2975.png)
+### 10. What was the volume of orders for each day of the week?
+```sql
+SELECT
+  TO_CHAR(order_time, 'Day') AS day_of_week,
+  COUNT(order_id) AS pizza_count
+FROM pizza_runner.customer_orders
+GROUP BY day_of_week, DATE_PART('dow', order_time)
+ORDER BY DATE_PART('dow', order_time);
+```
+#### Answer
+![image](https://user-images.githubusercontent.com/108972584/263453429-17ced325-242c-414a-8d61-10abcf885f97.png)
