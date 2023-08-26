@@ -86,3 +86,15 @@ GROUP BY 1
 ```
 #### Answer
 ![image](https://user-images.githubusercontent.com/108972584/263253587-0b6cb41c-eb90-49b6-b550-8c56089e7d44.png)
+### 8. How many pizzas were delivered that had both exclusions and extras?
+```sql
+SELECT
+COUNT(c.order_id) pizza_count
+FROM pizza_runner.customer_orders c
+LEFT JOIN pizza_runner.runner_orders r
+	ON 	r.order_id = c.order_id
+WHERE cancellation IS NULL AND exclusions IS NOT NULL AND extras IS NOT NULL
+```
+#### Answer
+![image](https://user-images.githubusercontent.com/108972584/263449166-74324ed6-e9b0-4ce7-8c3e-3c7757013e93.png)
+### 9. What was the total volume of pizzas ordered for each hour of the day?
