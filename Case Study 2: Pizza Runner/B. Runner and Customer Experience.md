@@ -32,4 +32,13 @@ FROM t
 #### Answer
 ![image](https://user-images.githubusercontent.com/108972584/263502791-d650d3c7-741f-4753-9c91-7c25f19f7681.png)
 ### 3. Is there any relationship between the number of pizzas and how long the order takes to prepare?
-
+```sql
+SELECT
+c.order_id
+,COUNT(pizza_id) qty_pizza
+,DATE_PART('minute',AGE(pickup_time::TIMESTAMP,order_time)):INTEGER 
+FROM pizza_runner.customer_orders c
+LEFT JOIN pizza_runner.runner_orders r 
+ 	ON c.order_id = r.order_id
+GROUP BY 1,2
+```
