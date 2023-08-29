@@ -36,9 +36,12 @@ FROM t
 SELECT
 c.order_id
 ,COUNT(pizza_id) qty_pizza
-,DATE_PART('minute',AGE(pickup_time::TIMESTAMP,order_time)):INTEGER 
+,DATE_PART('minute',AGE(pickup_time::TIMESTAMP,order_time))::INTEGER AS time_pickup
 FROM pizza_runner.customer_orders c
 LEFT JOIN pizza_runner.runner_orders r 
  	ON c.order_id = r.order_id
-GROUP BY 1,2
+WHERE cancellation IS NULL
+GROUP BY 1,3
 ```
+#### Answer
+![image](https://user-images.githubusercontent.com/108972584/263991546-36b7b7c3-cfb2-4b09-b3dc-2e040f0455ea.png)
