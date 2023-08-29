@@ -45,3 +45,27 @@ GROUP BY 1,3
 ```
 #### Answer
 ![image](https://user-images.githubusercontent.com/108972584/263991546-36b7b7c3-cfb2-4b09-b3dc-2e040f0455ea.png)
+### 4.What was the average distance travelled for each customer?
+```sql
+SELECT
+c.customer_id
+,TO_CHAR(AVG(r.distance),'FM999.00')
+FROM pizza_runner.runner_orders r 
+LEFT JOIN pizza_runner.customer_orders c  
+	ON c.order_id=r.order_id
+WHERE cancellation IS NULL
+GROUP BY 1
+```
+#### Answer
+![image](https://user-images.githubusercontent.com/108972584/263998259-54b0ecc4-5145-4aa8-bcf8-900cb94b28cb.png)
+### 5.What was the difference between the longest and shortest delivery times for all orders?
+```sql
+SELECT
+MAX(duration)-MIN(duration) max_diff
+FROM pizza_runner.runner_orders 
+WHERE cancellation IS NULL
+```
+#### Answer
+![image](https://user-images.githubusercontent.com/108972584/264001153-af2523a7-fb29-45c3-a5b8-de6ed22edbb2.png)
+### 6. What was the average speed for each runner for each delivery and do you notice any trend for these values?
+```sql
