@@ -69,3 +69,30 @@ WHERE cancellation IS NULL
 ![image](https://user-images.githubusercontent.com/108972584/264001153-af2523a7-fb29-45c3-a5b8-de6ed22edbb2.png)
 ### 6. What was the average speed for each runner for each delivery and do you notice any trend for these values?
 ```sql
+SELECT
+runner_id
+,order_id
+,DATE_PART('HOUR',pickup_time) hour_of_day
+,TO_CHAR(distance/duration*60,'FM999.00') avg_speed
+FROM pizza_runner.runner_orders 
+WHERE cancellation IS NULL
+ORDER BY 1,2
+```
+#### Answer
+![image](https://user-images.githubusercontent.com/108972584/264226572-acffe470-b211-4a30-b6af-93f4e6a1efff.png)
+### 7. What is the successful delivery percentage for each runner?
+```sql
+WITH delivery_cte AS( 
+SELECT
+runner_id
+,SUM(CASE WHEN cancellation IS NULL THEN 1 ELSE 0 END) success_delivery
+,COUNT(order_id) total_order
+FROM pizza_runner.runner_orders 
+GROUP BY 1
+)
+SELECT
+runner_id
+,success_delivery
+,total_order
+,success_delivery/total_order AS success_percent
+FROM delivery_cte
