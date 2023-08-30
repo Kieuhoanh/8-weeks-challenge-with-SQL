@@ -82,17 +82,13 @@ ORDER BY 1,2
 ![image](https://user-images.githubusercontent.com/108972584/264226572-acffe470-b211-4a30-b6af-93f4e6a1efff.png)
 ### 7. What is the successful delivery percentage for each runner?
 ```sql
-WITH delivery_cte AS( 
 SELECT
 runner_id
-,SUM(CASE WHEN cancellation IS NULL THEN 1 ELSE 0 END) success_delivery
-,COUNT(order_id) total_order
+,100*SUM(CASE WHEN cancellation IS NULL THEN 1 ELSE 0 END)/COUNT(*) success_percent
 FROM pizza_runner.runner_orders 
 GROUP BY 1
-)
-SELECT
-runner_id
-,success_delivery
-,total_order
-,success_delivery/total_order AS success_percent
-FROM delivery_cte
+ORDER BY 1
+```
+#### Answer
+![image](https://user-images.githubusercontent.com/108972584/264252187-7bde8ad0-ac93-41ba-8fcf-6d267acc2fdd.png)
+
