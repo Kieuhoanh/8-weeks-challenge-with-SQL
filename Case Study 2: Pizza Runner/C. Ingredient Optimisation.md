@@ -131,5 +131,86 @@ ORDER BY 1
 ```
 #### Answer
 ![image](https://user-images.githubusercontent.com/108972584/265193560-78ec02c0-dfe5-427b-a3ac-e4db4cd221de.png)
-
-
+### 5. Generate an alphabetically ordered comma separated ingredient list for each pizza order from the customer_orders table and add a 2x in front of any relevant ingredients
+- For example: "Meat Lovers: 2xBacon, Beef, ... , Salami"
+```sql
+WITH cte_row_number AS(  
+SELECT
+*
+,ROW_NUMBER() OVER () original_row_number
+FROM pizza_runner.customer_orders
+)
+,cte_split_topping AS (
+SELECT
+order_id
+,customer_id
+,pizza_id
+,REGEXP_SPLIT_TO_TABLE(exclusions, '[,\s]+')::INTEGER AS topping_id_exclusions
+,REGEXP_SPLIT_TO_TABLE(extras, '[,\s]+')::INTEGER AS topping_id_extras
+,order_time
+,original_row_number
+FROM cte_row_number
+UNION
+SELECT
+order_id
+,customer_id
+,pizza_id
+,NULL AS topping_id_exclusions
+,NULL AS topping_id_extras
+,order_time
+,original_row_number
+FROM cte_row_number
+WHERE exclusions IS NULL AND extras IS NULL
+)
+,cte_add_column_topping AS ( 
+SELECT
+order_id
+,customer_id
+,base.pizza_id
+,topping_id_exclusions
+,topping_id_extras
+,order_time
+,original_row_number
+,REGEXP_SPLIT_TO_TABLE(toppings, '[,\s]+')::INTEGER AS toppings
+FROM cte_split_topping AS base
+LEFT JOIN pizza_runner.pizza_recipes AS recipes
+ON recipes.pizza_id = base.pizza_id
+)
+,cte_topping_name AS ( 
+SELECT
+order_id
+,customer_id
+,pizza_id
+,order_time
+,original_row_number
+,CASE WHEN topping_id_exclusions = toppings THEN '' 
+	WHEN topping_id_extras = toppings THEN '2x'||t2.topping_name
+	ELSE t2.topping_name
+	END AS ingredient
+FROM cte_add_column_topping t1
+LEFT JOIN pizza_runner.pizza_toppings t2
+ON t2.topping_id = t1.toppings
+)
+,cte_out_put AS ( 
+SELECT
+order_id
+,customer_id
+,pizza_id
+,order_time
+,original_row_number
+,STRING_AGG(ingredient,', ') ingredient_list
+FROM cte_topping_name 
+WHERE ingredient IS NOT NULL
+GROUP BY 1,2,3,4,5
+)
+SELECT
+order_id
+,customer_id
+,t3.pizza_id
+,order_time
+,original_row_number
+,pizza_name|| ': ' || ingredient_list AS ingredient_list
+FROM cte_out_put t3
+LEFT JOIN pizza_runner.pizza_names t4
+ON t3.pizza_id = t4.pizza_id
+```
