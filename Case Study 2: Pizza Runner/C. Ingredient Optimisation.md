@@ -183,7 +183,7 @@ order_id
 ,pizza_id
 ,order_time
 ,original_row_number
-,CASE WHEN topping_id_exclusions = toppings THEN '' 
+,CASE WHEN topping_id_exclusions = toppings THEN NULL 
 	WHEN topping_id_extras = toppings THEN '2x'||t2.topping_name
 	ELSE t2.topping_name
 	END AS ingredient
@@ -200,7 +200,6 @@ order_id
 ,original_row_number
 ,STRING_AGG(ingredient,', ') ingredient_list
 FROM cte_topping_name 
-WHERE ingredient IS NOT NULL
 GROUP BY 1,2,3,4,5
 )
 SELECT
@@ -213,4 +212,7 @@ order_id
 FROM cte_out_put t3
 LEFT JOIN pizza_runner.pizza_names t4
 ON t3.pizza_id = t4.pizza_id
+ORDER BY 1
 ```
+#### Answer
+![image](https://user-images.githubusercontent.com/108972584/265228116-418889c3-1963-453c-97cb-d9784dabd062.png)
