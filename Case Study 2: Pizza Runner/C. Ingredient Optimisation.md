@@ -216,3 +216,69 @@ ORDER BY 1
 ```
 #### Answer
 ![image](https://user-images.githubusercontent.com/108972584/265228116-418889c3-1963-453c-97cb-d9784dabd062.png)
+### 6. What is the total quantity of each ingredient used in all delivered pizzas sorted by most frequent first?
+```sql
+WITH cte_row_number AS(  
+SELECT
+*
+,ROW_NUMBER() OVER () original_row_number
+FROM pizza_runner.customer_orders
+)
+,cte_split_topping AS (
+SELECT
+pizza_id
+,REGEXP_SPLIT_TO_TABLE(toppings, '[,\s]+')::INTEGER AS split_topping
+FROM pizza_runner.pizza_recipes
+)
+,cte_base_topping AS(
+SELECT
+order_id
+,customer_id
+,t1.pizza_id
+,split_topping AS topping_id
+,order_time
+,original_row_number
+FROM cte_row_number t1
+LEFT JOIN cte_split_topping t2
+ON t1.pizza_id=t2.pizza_id
+)
+,cte_exclusion AS ( 
+SELECT
+order_id
+,customer_id
+,pizza_id
+,REGEXP_SPLIT_TO_TABLE(exclusions, '[,\s]+')::INTEGER AS topping_id
+,order_time
+,original_row_number
+FROM cte_row_number
+WHERE exclusions IS NOT NULL
+) 
+,cte_extras AS( 
+SELECT
+order_id
+,customer_id
+,pizza_id
+,REGEXP_SPLIT_TO_TABLE(extras, '[,\s]+')::INTEGER AS topping_id
+,order_time
+,original_row_number
+FROM cte_row_number
+WHERE extras IS NOT NULL
+)
+,cte_combined_orders AS (
+SELECT * FROM cte_base_topping
+EXCEPT
+SELECT * FROM cte_exclusion
+UNION ALL
+SELECT * FROM cte_extras
+)
+SELECT
+topping_name
+,COUNT(t3.topping_id) topping_count
+FROM cte_combined_orders t3
+LEFT JOIN pizza_runner.pizza_toppings t4
+ON t3.topping_id=t4.topping_id
+GROUP BY 1
+ORDER BY 2 DESC
+```
+#### Answer
+![image](https://user-images.githubusercontent.com/108972584/265387315-89ae5d07-1256-416a-b8ef-d024d41786f8.png)
