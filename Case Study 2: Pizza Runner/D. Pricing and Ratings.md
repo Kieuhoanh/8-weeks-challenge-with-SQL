@@ -74,7 +74,7 @@ c.customer_id
 ,pickup_time
 ,DATE_PART('MINUTE',AGE(pickup_time,order_time)) pickup_time
 ,duration
-,TO_CHAR(distance/duration,'FM9990.00') AS avg_speed
+,TO_CHAR(60*distance/duration,'FM9990.00') AS avg_speed
 ,COUNT(pizza_id) pizza_count
 FROM pizza_runner.runner_orders r 
 LEFT JOIN pizza_runner.customer_orders c 
@@ -85,3 +85,5 @@ WHERE cancellation IS NULL
 GROUP BY 1,2,3,4,5,6,7,8,9
 ORDER BY 1,2
 ```
+#### Answer
+![image](https://user-images.githubusercontent.com/108972584/265571282-99530040-6cbd-4217-8c7c-3987d5b2d931.png)
