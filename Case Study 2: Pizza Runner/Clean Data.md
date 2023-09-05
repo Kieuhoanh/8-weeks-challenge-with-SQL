@@ -103,11 +103,11 @@ SET duration = NULL
 WHERE duration ='' OR duration LIKE 'null';
 
 UPDATE pizza_runner.runner_orders
-SET duration = LEFT(distance,2)
+SET duration = LEFT(duration,2)
 WHERE duration LIKE '%mins' OR duration LIKE '%minute' OR duration LIKE '%minutes';
 
 UPDATE pizza_runner.runner_orders
 SET cancellation = NULL
 WHERE cancellation ='' OR cancellation LIKE 'null';
 ```
-![image](https://user-images.githubusercontent.com/108972584/263039255-104363c2-1517-493d-aaf3-ebbd745a2b17.png)
+![image](https://user-images.githubusercontent.com/108972584/265570113-c9614acc-341a-43e6-8643-c118218e2165.png)
