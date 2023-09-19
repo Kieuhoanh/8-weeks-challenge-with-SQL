@@ -35,5 +35,46 @@ GROUP BY 1,2
 ORDER BY 1
 ```
 #### Answer
-![image](
-
+![image](https://user-images.githubusercontent.com/108972584/268878524-e21e617c-b5a9-47e4-ac36-3aedb5895638.png)
+### 4. What is the customer count and percentage of customers who have churned rounded to 1 decimal place?
+```SQL
+SELECT
+SUM(CASE WHEN plan_id = 4 THEN 1 ELSE 0 END) churned_cus
+,ROUND(100.0*SUM(CASE WHEN plan_id = 4 THEN 1 ELSE 0 END)/COUNT(DISTINCT customer_id),1) percentage
+FROM foodie_fi.subscriptions
+```
+#### Answer
+![image](https://user-images.githubusercontent.com/108972584/268881356-cd411c21-81e1-4d52-95b2-4ed6981f352e.png)
+### 5. How many customers have churned straight after their initial free trial - what percentage is this rounded to the nearest whole number?
+```SQL
+WITH cte_rank AS ( 
+SELECT
+customer_id
+,plan_id
+,ROW_NUMBER() OVER(PARTITION BY customer_id ORDER BY start_date) rank
+FROM foodie_fi.subscriptions
+)
+SELECT
+SUM(CASE WHEN plan_id = 4 THEN 1 ELSE 0 END) churned_straight
+,ROUND(100.0*SUM(CASE WHEN plan_id = 4 THEN 1 ELSE 0 END)/COUNT(*),1) percentage
+FROM cte_rank
+WHERE rank = 2
+```
+#### Answer
+![image](https://user-images.githubusercontent.com/108972584/268886200-b61a3eb6-012a-48c6-9f0c-edc84fe017c5.png)
+### 6. What is the number and percentage of customer plans after their initial free trial?
+```sql
+WITH cte_rank AS ( 
+SELECT
+customer_id
+,plan_id
+,ROW_NUMBER() OVER(PARTITION BY customer_id ORDER BY start_date) rank
+FROM foodie_fi.subscriptions
+WHERE plan_id != 0
+)
+SELECT
+SUM(CASE WHEN plan_id != 4 THEN 1 ELSE 0 END) customer
+,ROUND(100.0*SUM(CASE WHEN plan_id != 4 THEN 1 ELSE 0 END)/COUNT(*),1) percentage
+FROM cte_rank
+WHERE rank = 2
+```
