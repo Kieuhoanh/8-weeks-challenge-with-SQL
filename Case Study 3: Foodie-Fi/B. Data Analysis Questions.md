@@ -73,8 +73,49 @@ FROM foodie_fi.subscriptions
 WHERE plan_id != 0
 )
 SELECT
-SUM(CASE WHEN plan_id != 4 THEN 1 ELSE 0 END) customer
-,ROUND(100.0*SUM(CASE WHEN plan_id != 4 THEN 1 ELSE 0 END)/COUNT(*),1) percentage
-FROM cte_rank
-WHERE rank = 2
+p.plan_id
+,p.plan_name
+,COUNT(*) customer_number
+,ROUND(100*COUNT(*)/SUM(COUNT(*))OVER()) percentage
+FROM cte_rank r
+LEFT JOIN foodie_fi.plans p
+ON p.plan_id = r.plan_id
+WHERE rank = 1
+GROUP BY 1,2
 ```
+#### Answer
+![image](https://user-images.githubusercontent.com/108972584/268903099-6bfde434-d3a9-42f3-8313-da51ef067c95.png)
+### 7. What is the customer count and percentage breakdown of all 5 plan_name values at 2020-12-31?
+```sql
+WITH cte_ranked AS( 
+SELECT
+customer_id
+,plan_id
+,start_date
+,ROW_NUMBER() OVER(PARTITION BY customer_id ORDER BY start_date DESC) rank
+FROM foodie_fi.subscriptions
+WHERE start_date <= '2020-12-31'
+)
+SELECT
+r.plan_id
+,p.plan_name
+,COUNT(*) customers
+,ROUND(100*COUNT(*)/SUM(COUNT(*)) OVER(),1) percentage
+FROM cte_ranked r
+LEFT JOIN foodie_fi.plans p
+ON p.plan_id = r.plan_id
+WHERE rank = 1
+GROUP BY 1,2
+```
+#### Answer
+![image](https://user-images.githubusercontent.com/108972584/268905755-e89a8f5e-ab59-4365-ac9d-f3f0790e8005.png)
+### 8.How many customers have upgraded to an annual plan in 2020?
+```sql
+SELECT
+COUNT(*) annual_customers
+FROM foodie_fi.subscriptions
+WHERE start_date <= '2020-12-31' AND start_date >= '2020-01-01' AND plan_id = 3
+```
+#### Answer
+![image](https://user-images.githubusercontent.com/108972584/268910729-c166a58c-b932-4b9f-ac80-f2da0719a69d.png)
+### 9. How many days on average does it take for a customer to an annual plan from the day they join Foodie-Fi?
