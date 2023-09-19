@@ -24,8 +24,16 @@ ORDER BY 1
 ### 3.What plan start_date values occur after the year 2020 for our dataset? Show the breakdown by count of events for each plan_name
 ```sql
 SELECT
-*
-FROM foodie_fi.subscriptions
+p.plan_id
+,plan_name
+,COUNT(*)
+FROM foodie_fi.subscriptions s
+LEFT JOIN foodie_fi.plans p
+ON p.plan_id = s.plan_id
 WHERE start_date > '2020-12-31'
+GROUP BY 1,2
+ORDER BY 1
 ```
+#### Answer
+![image](
 
