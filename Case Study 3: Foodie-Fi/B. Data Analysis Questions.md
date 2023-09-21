@@ -119,3 +119,20 @@ WHERE start_date <= '2020-12-31' AND start_date >= '2020-01-01' AND plan_id = 3
 #### Answer
 ![image](https://user-images.githubusercontent.com/108972584/268910729-c166a58c-b932-4b9f-ac80-f2da0719a69d.png)
 ### 9. How many days on average does it take for a customer to an annual plan from the day they join Foodie-Fi?
+```SQL
+WITH cte_annual AS( 
+SELECT
+customer_id
+,plan_id
+,FIRST_VALUE(start_date) OVER(PARTITION BY customer_id) join_date
+,start_date annual_date
+FROM foodie_fi.subscriptions
+)
+SELECT
+ROUND(AVG(annual_date-join_date)::INTEGER) avg
+FROM cte_annual
+WHERE plan_id=3
+```
+#### Answer
+![image](https://user-images.githubusercontent.com/108972584/268921217-ae578260-ffd5-40d8-b552-91539541e7dc.png)
+### 10. Can you further breakdown this average value into 30 day periods (i.e. 0-30 days, 31-60 days etc)
