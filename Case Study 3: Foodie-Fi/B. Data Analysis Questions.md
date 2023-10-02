@@ -136,3 +136,43 @@ WHERE plan_id=3
 #### Answer
 ![image](https://user-images.githubusercontent.com/108972584/268921217-ae578260-ffd5-40d8-b552-91539541e7dc.png)
 ### 10. Can you further breakdown this average value into 30 day periods (i.e. 0-30 days, 31-60 days etc)
+```sql
+SELECT 
+customer_id
+,start_date
+FROM foodie_fi.subscriptions
+WHERE plan_id = 0
+)
+,annual_time AS(
+SELECT
+customer_id
+,start_date end_date
+FROM foodie_fi.subscriptions
+WHERE plan_id = 3
+)
+SELECT 
+CONCAT(DIV((end_date - start_date),30)*30+1,'-',(DIV((end_date - start_date),30) + 1)*30,' days') breakdown_period
+,COUNT(DISTINCT a.customer_id) customer_count
+FROM trial_time a
+INNER JOIN annual_time b ON a.customer_id = b.customer_id
+GROUP BY 1
+```
+#### Answer
+![image](https://user-images.githubusercontent.com/108972584/271779351-c663605e-4e94-47b4-add5-23c07277695c.png)
+
+### 11. How many customers downgraded from a pro monthly to a basic monthly plan in 2020?
+```sql
+WITH cte_next_plan AS( 
+SELECT 
+customer_id
+,plan_id
+,start_date
+,LAG(plan_id) OVER(PARTITION BY customer_id ORDER BY start_date DESC) next_plan
+FROM foodie_fi.subscriptions
+WHERE DATE_PART('year',start_date) = 2020
+) 
+SELECT
+COUNT(DISTINCT customer_id)
+FROM cte_next_plan
+WHERE plan_id = 2 AND next_plan = 1
+```
